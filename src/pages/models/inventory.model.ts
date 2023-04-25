@@ -2,23 +2,28 @@ import { Schema, model, models } from "mongoose";
 import Product from "./product.model";
 
 type TInventory = {
-  lot: string;
-  winery: string;
-  inventory: number;
+  Lote: string;
+  Almacen: string;
+  Cantidad: number;
+  Formulas: number;
   product?: string;
 };
 
 const inventorySchema = new Schema<TInventory>(
   {
-    lot: {
+    Lote: {
       type: String,
       trim: true,
     },
-    winery: {
+    Almacen: {
       type: String,
       trim: true,
     },
-    inventory: {
+    Cantidad: {
+      type: Number,
+      trim: true,
+    },
+    Formulas: {
       type: Number,
       trim: true,
     },

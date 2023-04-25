@@ -1,22 +1,22 @@
 import { Schema, model, models } from "mongoose";
 
 type TProduct = {
-  code: number;
-  description: string;
-  presentation: number;
+  Codigo: number;
+  Descripcion: string;
+  Presentacion: number;
 };
 
 const productSchema = new Schema<TProduct>(
   {
-    code: {
+    Codigo: {
       type: Number,
       trim: true,
     },
-    description: {
+    Descripcion: {
       type: String,
       trim: true,
     },
-    presentation: {
+    Presentacion: {
       type: Number,
       trim: true,
     },
