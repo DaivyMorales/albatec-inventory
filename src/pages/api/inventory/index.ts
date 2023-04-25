@@ -1,14 +1,12 @@
-import { dbConnect } from "../../../utils/db";
 import { NextApiRequest, NextApiResponse } from "next";
-// import Product from "../../models/product.model";
-import Inventory from "../../models/inventory.model";
+import { dbConnect } from "../../../utils/db";
+import Inventory from "../../../models/inventory.model";
 
-dbConnect();
-
-export default async function handler(
+export default async function indexInventory(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  await dbConnect();
   const { method, body } = req;
 
   switch (method) {
@@ -23,20 +21,12 @@ export default async function handler(
           res.status(500).json({ error: "Ha ocurrido un error." });
         }
       }
+      break;
 
     case "POST":
       try {
-        const { lot, winery, inventory, product } = body;
-
-        const newInventory = new Inventory({
-          lot,
-          winery,
-          inventory,
-          product,
-        });
-        const inventorySaved = await newInventory.save();
-
-        return res.status(200).json(inventorySaved);
+        const insertedData = await Inventory.insertMany(req.body);
+        return res.status(200).json(insertedData);
       } catch (error) {
         if (error instanceof Error) {
           res.status(500).json({ error: error.message });
@@ -44,8 +34,27 @@ export default async function handler(
           res.status(500).json({ error: "Ha ocurrido un error." });
         }
       }
+      break;
+
+    case "DELETE":
+      try {
+        const inventoryDeleted = await Inventory.deleteMany();
+
+        if (!inventoryDeleted)
+          return res.status(404).json("inventory not found");
+
+        return res.status(200).json("inventory deleted successfully");
+      } catch (error) {
+        if (error instanceof Error) {
+          res.status(500).json({ error: error.message });
+        } else {
+          res.status(500).json({ error: "Ha ocurrido un error." });
+        }
+      }
+      break;
 
     default:
-      return res.status(400).json({ msg: "That method isn't supported!" });
+      res.status(400).json("Invalid method!");
+      break;
   }
 }

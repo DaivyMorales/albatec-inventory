@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import * as xslx from "xlsx";
 import axios from "axios";
+import InventoryCard from "@/components/inventory/InventoryCard";
+import { RiFileExcel2Fill } from "react-icons/ri";
 
 interface IData {
   CANTIDAD: number;
@@ -22,12 +24,13 @@ interface IInventory {
 
 export default function index() {
   const [inventoryContent, setInventoryContent] = useState<IInventory[]>([]);
+  console.log(inventoryContent);
 
   const handleFileUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
-    
+
     if (!file) return;
 
     const fileReader = new FileReader();
@@ -37,13 +40,10 @@ export default function index() {
       if (!event.target) return;
       const fileBuffer = event.target.result as ArrayBuffer;
       const workbook = xslx.read(fileBuffer, { type: "array" });
-      const worksheet = workbook.Sheets["Sheet1"];
+      const worksheet = workbook.Sheets["Hoja1"];
       const dataExcel: Array<IData> = xslx.utils.sheet_to_json(worksheet);
       try {
-        const response = await axios.post(
-          "https://purchasing-control.vercel.app/api/inventory",
-          dataExcel
-        );
+        const response = await axios.post("http://localhost:3000/api/inventory", dataExcel);
         setInventoryContent(response.data);
       } catch (error) {
         console.log(error);
@@ -55,45 +55,44 @@ export default function index() {
     };
   };
   return (
-    <div className="flex w-screen h-screen justify-center items-center">
+    <div className="flex   justify-center items-center">
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div>
+          <label className="buttonExcel">
+            <RiFileExcel2Fill />
+            Importar Excel
+            <input
+              className="hidden"
+              type="file"
+              accept=".xlsx"
+              onChange={handleFileUpload}
+            />
+          </label>
+        </div>
         <table className="w-full text-sm text-left text-blue-100 dark:text-blue-100">
           <thead className="text-xs text-white uppercase bg-blue-600 border-b border-blue-400 dark:text-white">
             <tr>
               <th scope="col" className="px-6 py-3">
-                Product name
+                Codigo
               </th>
               <th scope="col" className="px-6 py-3">
-                Color
+                Descripcion
               </th>
               <th scope="col" className="px-6 py-3">
-                Category
+                Lote
               </th>
               <th scope="col" className="px-6 py-3">
-                Price
+                Almacen
               </th>
               <th scope="col" className="px-6 py-3">
-                Action
+                Cantidad
               </th>
             </tr>
           </thead>
           <tbody>
-            <tr className="bg-blue-600 border-b border-blue-400 hover:bg-blue-500">
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-blue-50 whitespace-nowrap dark:text-blue-100"
-              >
-                Apple MacBook Pro 17"
-              </th>
-              <td className="px-6 py-4">Silver</td>
-              <td className="px-6 py-4">Laptop</td>
-              <td className="px-6 py-4">$2999</td>
-              <td className="px-6 py-4">
-                <a href="#" className="font-medium text-white hover:underline">
-                  Edit
-                </a>
-              </td>
-            </tr>
+            {inventoryContent.map((inventory) => (
+              <InventoryCard inventory={inventory} key={inventory._id} />
+            ))}
           </tbody>
         </table>
       </div>
