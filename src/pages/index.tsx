@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as xslx from "xlsx";
+import { GetServerSidePropsContext } from "next";
 import axios from "axios";
 import { RiFileExcel2Fill } from "react-icons/ri";
 import CardInventory from "../components/inventory/CardInventory";
@@ -22,9 +23,16 @@ interface IInventory {
   updatedAt: string;
 }
 
-export default function index() {
+interface MyProps {
+  data: IInventory[];
+}
+
+export default function index({ data }: MyProps) {
   const [inventoryContent, setInventoryContent] = useState<IInventory[]>([]);
-  console.log(inventoryContent);
+
+  useEffect(() => {
+    setInventoryContent(data);
+  }, []);
 
   const handleFileUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -54,6 +62,15 @@ export default function index() {
       console.error("Error reading file:", event);
     };
   };
+
+  const deleteAllInventory = async () => {
+    try {
+      await axios.delete("/api/inventory");
+      setInventoryContent([]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="flex   justify-center items-center">
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -68,6 +85,16 @@ export default function index() {
               onChange={handleFileUpload}
             />
           </label>
+
+          <button
+            className="bg-red-500"
+            onClick={() => {
+              deleteAllInventory();
+              setInventoryContent([]);
+            }}
+          >
+            Eliminar
+          </button>
         </div>
         <table className="w-full text-sm text-left text-blue-100 dark:text-blue-100">
           <thead className="text-xs text-white uppercase bg-blue-600 border-b border-blue-400 dark:text-white">
@@ -98,4 +125,13 @@ export default function index() {
       </div>
     </div>
   );
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const res = await fetch("https://albatec-inventory.vercel.app/api/inventory");
+  const data = await res.json();
+
+  return {
+    props: { data },
+  };
 }
