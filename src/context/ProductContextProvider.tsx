@@ -8,6 +8,9 @@ interface IProduct {
   Codigo: number;
   Descripcion: string;
   Presentacion: string;
+  _id: string;
+  createdAt: string;
+  updateAt: string;
 }
 
 interface IContext {

@@ -33,6 +33,8 @@ export default async function indexPredict(
           Descripcion,
           Presentacion,
         });
+        
+        // const insertedData = await Product.insertMany(req.body);
 
         const productSaved = await newProduct.save();
 
