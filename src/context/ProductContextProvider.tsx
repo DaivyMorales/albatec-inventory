@@ -20,6 +20,9 @@ interface IContext {
   fieldOn: string;
   setFieldOn: React.Dispatch<React.SetStateAction<string>>;
   updateProduct: (Codigo: number, body: object) => Promise<void>;
+  createProduct: (values: object | undefined) => Promise<void>;
+  columnOn: boolean;
+  setColumnOn: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const productContext = createContext<IContext>({
@@ -28,11 +31,15 @@ export const productContext = createContext<IContext>({
   fieldOn: "n",
   setFieldOn: () => {},
   updateProduct: async () => {},
+  createProduct: async () => {},
+  columnOn: false,
+  setColumnOn: () => {},
 });
 
 export const ProductContextProvider = ({ children }: ProductContextProps) => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [fieldOn, setFieldOn] = useState<string>("n");
+  const [columnOn, setColumnOn] = useState<boolean>(false);
 
   const updateProduct = async (Codigo: number, body: object) => {
     try {
@@ -51,9 +58,27 @@ export const ProductContextProvider = ({ children }: ProductContextProps) => {
     }
   };
 
+  const createProduct = async (values: object | undefined) => {
+    try {
+      const response = await axios.post("/api/product", values);
+      setProducts([...products, response.data]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <productContext.Provider
-      value={{ products, setProducts, fieldOn, setFieldOn, updateProduct }}
+      value={{
+        products,
+        setProducts,
+        fieldOn,
+        setFieldOn,
+        updateProduct,
+        createProduct,
+        columnOn,
+        setColumnOn,
+      }}
     >
       {children}
     </productContext.Provider>

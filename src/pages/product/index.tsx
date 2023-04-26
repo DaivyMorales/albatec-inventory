@@ -1,9 +1,8 @@
 import { productContext } from "@/context/ProductContextProvider";
 import { GetServerSidePropsContext } from "next";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import CardProduct from "../../components/product/CardProduct";
-import * as xlsx from "xlsx";
-import axios from "axios";
+import { useFormik } from "formik";
 
 interface IProduct {
   Codigo: number;
@@ -25,7 +24,25 @@ interface IData {
 }
 
 export default function TableProduct({ data }: MyProps) {
-  const { products, setProducts } = useContext(productContext);
+  const { products, setProducts, createProduct, setColumnOn, columnOn } =
+    useContext(productContext);
+
+  const [newProductSchema, setNewProductSchema] = useState({
+    Codigo: 0,
+    Descripcion: "",
+    Presentacion: 0,
+  });
+
+  const formik = useFormik({
+    initialValues: { newProductSchema },
+    onSubmit: async (values, { resetForm }) => {
+      console.log(values.newProductSchema);
+      createProduct(values.newProductSchema);
+      setColumnOn(!columnOn);
+      resetForm();
+    },
+    enableReinitialize: true,
+  });
 
   useEffect(() => {
     setProducts(data);
@@ -36,11 +53,16 @@ export default function TableProduct({ data }: MyProps) {
       <div className="flex justify-center flex-col items-center my-10 gap-y-2">
         <div className=" w-full flex justify-between items-center px-3 py-6  border-b border-gray-700">
           <h3>Productos</h3>
-          <button>Crear Producto</button>
+          <button
+            onClick={() => setColumnOn(!columnOn)}
+            className={`${columnOn ? "bg-red-500" : "bg-blue-500 "} `}
+          >
+            {columnOn ? "Cancelar" : "Crear Producto "}
+          </button>
         </div>
 
-        <div className="w-full px-24">
-          <div className="relative border-1 w-full border-gray-700 overflow-x-auto sm:rounded-lg px-6">
+        <div className="w-full px-10">
+          <div className="relative border-1 w-full border-gray-700 overflow-x-auto rounded-lg px-6">
             <table className="w-full text-xs text-left">
               <thead className="text-2xs text-gray-400 uppercase border-b border-gray-700 ">
                 <tr>
@@ -56,6 +78,57 @@ export default function TableProduct({ data }: MyProps) {
                 </tr>
               </thead>
               <tbody>
+                <tr
+                  className={`${
+                    columnOn ? "" : "hidden"
+                  } text-xs border-b border-gray-700 text-gray-300 font-normal`}
+                >
+                  <th className=" py-1">
+                    {columnOn ? (
+                      <form onSubmit={formik.handleSubmit}>
+                        <input
+                          className="fieldTable w-20"
+                          type="number"
+                          onChange={formik.handleChange}
+                          value={formik.values.newProductSchema.Codigo}
+                          name="newProductSchema.Codigo"
+                        />
+                      </form>
+                    ) : (
+                      ""
+                    )}
+                  </th>
+                  <td className="px-3 py-1">
+                    {columnOn ? (
+                      <form onSubmit={formik.handleSubmit}>
+                        <input
+                          className="fieldTable w-60"
+                          type="text"
+                          onChange={formik.handleChange}
+                          value={formik.values.newProductSchema.Descripcion}
+                          name="newProductSchema.Descripcion"
+                        />
+                      </form>
+                    ) : (
+                      ""
+                    )}
+                  </td>
+                  <td className="px-3 py-1">
+                    {columnOn ? (
+                      <form onSubmit={formik.handleSubmit}>
+                        <input
+                          className="fieldTable w-12"
+                          type="number"
+                          onChange={formik.handleChange}
+                          value={formik.values.newProductSchema.Presentacion}
+                          name="newProductSchema.Presentacion"
+                        />
+                      </form>
+                    ) : (
+                      ""
+                    )}
+                  </td>
+                </tr>
                 {products.map((product) => (
                   <CardProduct product={product} key={product._id} />
                 ))}

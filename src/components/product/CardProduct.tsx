@@ -17,7 +17,8 @@ interface MyProps {
 }
 
 export default function CardProduct({ product }: MyProps) {
-  const { fieldOn, setFieldOn, updateProduct } = useContext(productContext);
+  const { fieldOn, setFieldOn, updateProduct, columnOn } =
+    useContext(productContext);
 
   const [productSchema, setProductSchema] = useState({
     Codigo: product.Codigo,
@@ -40,7 +41,7 @@ export default function CardProduct({ product }: MyProps) {
     <tr
       className={`text-xs border-b border-gray-700 text-gray-300 font-normal ${
         fieldOn === product._id ? "bg-gray-900" : ""
-      }`}
+      } hover:bg-gray-900 ${columnOn ? "text-gray-600" : ""}`}
       onClick={() => setFieldOn(product._id)}
     >
       <th
@@ -63,7 +64,9 @@ export default function CardProduct({ product }: MyProps) {
         )}
       </th>
       <td
-        className="px-3 py-1 flex justify-start items-center gap-x-1 text-white "
+        className={`px-3 py-1 flex justify-start items-center gap-x-1 ${
+          columnOn ? "text-gray-600" : "text-white"
+        }`}
         onClick={() => setFieldOn(product._id)}
       >
         {fieldOn === product._id ? (
@@ -79,7 +82,10 @@ export default function CardProduct({ product }: MyProps) {
         ) : (
           product.Descripcion
         )}
-        <FaProductHunt size={10} className="text-blue-500" />
+        <FaProductHunt
+          size={10}
+          className={`${columnOn ? "text-gray-600" : "text-blue-500"}`}
+        />
       </td>
       <td className="px-3 py-1" onClick={() => setFieldOn(product._id)}>
         {fieldOn === product._id ? (
