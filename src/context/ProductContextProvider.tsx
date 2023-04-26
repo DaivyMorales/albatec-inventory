@@ -61,7 +61,7 @@ export const ProductContextProvider = ({ children }: ProductContextProps) => {
   const createProduct = async (values: object | undefined) => {
     try {
       const response = await axios.post("/api/product", values);
-      setProducts([...products, response.data]);
+      setProducts([response.data, ...products]);
     } catch (error) {
       console.log(error);
     }

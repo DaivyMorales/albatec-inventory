@@ -13,7 +13,7 @@ export default async function indexPredict(
   switch (method) {
     case "GET":
       try {
-        const product = await Product.find();
+        const product = await Product.find().sort({ createdAt: "desc" });
         return res.status(200).json(product);
       } catch (error) {
         if (error instanceof Error) {

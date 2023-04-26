@@ -55,7 +55,7 @@ export default function TableProduct({ data }: MyProps) {
           <h3>Productos</h3>
           <button
             onClick={() => setColumnOn(!columnOn)}
-            className={`${columnOn ? "bg-red-500" : "bg-blue-500 "} `}
+            className={`${columnOn ? "bg-red-500" : "bg-blue-600 "} `}
           >
             {columnOn ? "Cancelar" : "Crear Producto "}
           </button>
@@ -145,7 +145,13 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const res = await fetch("https://albatec-inventory.vercel.app/api/product");
   const data = await res.json();
 
+  // Ordenar los datos por fecha de creación descendente
+  const sortedData = data.sort(
+    (a: IProduct, b: IProduct) =>
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+
   return {
-    props: { data },
+    props: { data: sortedData },
   };
 }
