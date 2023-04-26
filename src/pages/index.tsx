@@ -43,10 +43,7 @@ export default function index() {
       const worksheet = workbook.Sheets["Hoja1"];
       const dataExcel: Array<IData> = xslx.utils.sheet_to_json(worksheet);
       try {
-        const response = await axios.post(
-          "http://localhost:3000/api/inventory",
-          dataExcel
-        );
+        const response = await axios.post("/api/inventory", dataExcel);
         setInventoryContent(response.data);
       } catch (error) {
         console.log(error);
