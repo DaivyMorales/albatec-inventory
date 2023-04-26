@@ -16,10 +16,14 @@ body {
   border-width: 1px;
 }
 
-h3{
+h3 {
   @apply font-semibold text-xl;
 }
 
-button{
+button {
   @apply bg-blue-600 text-xs font-normal px-3 py-2 rounded-md;
+}
+
+.fieldTable {
+  @apply bg-[#2f3336] font-semibold rounded-md px-1 shadow-sm shadow-gray-900;
 }
