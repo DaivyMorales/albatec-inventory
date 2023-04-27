@@ -7,7 +7,7 @@ import { useFormik } from "formik";
 interface IProduct {
   Codigo: number;
   Descripcion: string;
-  Presentacion: string;
+  Presentacion: number;
   _id: string;
   createdAt: string;
   updateAt: string;

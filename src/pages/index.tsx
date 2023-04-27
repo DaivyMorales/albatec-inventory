@@ -6,6 +6,7 @@ import { RiFileExcel2Fill } from "react-icons/ri";
 import CardInventory from "../components/inventory/CardInventory";
 import { useContext } from "react";
 import { productContext } from "@/context/ProductContextProvider";
+import { inventoryContext } from "@/context/InventoryContextProveider";
 
 interface IData {
   CANTIDAD: number;
@@ -40,7 +41,8 @@ interface MyProps {
 }
 
 export default function index({ data1, data2 }: MyProps) {
-  const [inventoryContent, setInventoryContent] = useState<IInventory[]>([]);
+  const { inventoryContent, setInventoryContent, deleteAllInventory } =
+    useContext(inventoryContext);
 
   const { setProducts } = useContext(productContext);
 
@@ -78,14 +80,8 @@ export default function index({ data1, data2 }: MyProps) {
     };
   };
 
-  const deleteAllInventory = async () => {
-    try {
-      await axios.delete("/api/inventory");
-      setInventoryContent([]);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  
+
   return (
     <div className="flex justify-center items-center">
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
