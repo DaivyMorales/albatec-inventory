@@ -60,10 +60,14 @@ export default function InventoryCard({ inventory }: MyProps) {
     enableReinitialize: true,
   });
 
-  const total =
+  let total: number =
     inventory.Conteo * presentacionLoad.Presentacion +
     inventory.Saldo +
     inventory.Formula;
+
+  if (isNaN(total)) {
+    total = 0;
+  }
 
   return (
     <>
@@ -151,17 +155,20 @@ export default function InventoryCard({ inventory }: MyProps) {
             inventory.Formula
           )}
         </td>
-        <td className="px-3 py-1 ">{total}</td>
+        <td className="px-3 py-1 ">{total == 0 ? "" : total}</td>
         <td
           className={`px-3 py-1 ${
             total - inventory.Cantidad > 0
               ? total - inventory.Cantidad === 0
                 ? "text-yellow-600"
-                : "text-gray-500 "
+                : "text-gray-400 "
               : "text-red-500 font-bold"
           }`}
         >
-          {total - inventory.Cantidad}
+          {total ===
+          presentacionLoad.Presentacion - presentacionLoad.Presentacion
+            ? ""
+            : total - inventory.Cantidad}
         </td>
       </tr>
     </>
