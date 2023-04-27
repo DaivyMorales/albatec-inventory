@@ -21,7 +21,11 @@ h3 {
 }
 
 button {
-  @apply bg-blue-600 text-xs font-normal px-3 py-2 rounded-md;
+  @apply text-xs font-normal px-3 py-2 rounded-md shadow-lg;
+}
+
+.buttonExcel {
+  @apply bg-blue-600 text-xs font-normal px-3 py-2 rounded-md shadow-lg;
 }
 
 .fieldTable {

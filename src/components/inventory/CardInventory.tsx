@@ -72,7 +72,7 @@ export default function InventoryCard({ inventory }: MyProps) {
   return (
     <>
       <tr
-        className={`text-2xs border-b border-gray-700 text-gray-300 font-normal ${
+        className={`text-xs border-b border-gray-700 text-gray-300 font-normal ${
           fieldOn === inventory._id ? "bg-gray-900" : ""
         } hover:bg-gray-900 ${columnOn ? "text-gray-600" : ""}`}
         onClick={() => setFieldOn(inventory._id)}
@@ -112,7 +112,7 @@ export default function InventoryCard({ inventory }: MyProps) {
           {fieldOn === inventory._id ? (
             <form onSubmit={formik.handleSubmit}>
               <input
-                className="fieldTable w-12"
+                className="fieldTable w-8"
                 type="text"
                 onChange={formik.handleChange}
                 value={formik.values.inventorySchema.Conteo || ""}
@@ -128,7 +128,7 @@ export default function InventoryCard({ inventory }: MyProps) {
           {fieldOn === inventory._id ? (
             <form onSubmit={formik.handleSubmit}>
               <input
-                className="fieldTable w-12"
+                className="fieldTable w-8"
                 type="text"
                 onChange={formik.handleChange}
                 value={formik.values.inventorySchema.Saldo || ""}
@@ -144,7 +144,7 @@ export default function InventoryCard({ inventory }: MyProps) {
           {fieldOn === inventory._id ? (
             <form onSubmit={formik.handleSubmit}>
               <input
-                className="fieldTable w-12"
+                className="fieldTable w-8"
                 type="text"
                 onChange={formik.handleChange}
                 value={formik.values.inventorySchema.Formula || ""}

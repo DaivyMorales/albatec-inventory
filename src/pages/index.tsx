@@ -87,27 +87,35 @@ export default function index({ data1, data2 }: MyProps) {
   return (
     <div className="flex justify-center items-center">
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <div>
-          <label className="buttonExcel">
-            <RiFileExcel2Fill />
-            Importar Excel
-            <input
-              className="hidden"
-              type="file"
-              accept=".xlsx"
-              onChange={handleFileUpload}
-            />
-          </label>
+        <div className="flex justify-start items-center gap-x-2 p-5">
+          {inventoryContent.length > 0 ? (
+            <>
+              <button
+                className="bg-red-500"
+                onClick={() => {
+                  deleteAllInventory();
+                  setInventoryContent([]);
+                }}
+              >
+                Eliminar
+              </button>
 
-          <button
-            className="bg-red-500"
-            onClick={() => {
-              deleteAllInventory();
-              setInventoryContent([]);
-            }}
-          >
-            Eliminar
-          </button>
+              <button className="border-2 border-gray-700 hover:bg-gray-700">
+                Exportar
+              </button>
+            </>
+          ) : (
+            <label className="buttonExcel flex cursor-pointer gap-x-1 justify-center items-center hover:bg-blue-500">
+              Importar Excel
+              <input
+                className="hidden"
+                type="file"
+                accept=".xlsx"
+                onChange={handleFileUpload}
+              />
+              <RiFileExcel2Fill />
+            </label>
+          )}
         </div>
         <table className=" text-sm text-left text-blue-100 dark:text-blue-100">
           <thead className="text-2xs text-gray-400 uppercase border-b border-gray-700">
