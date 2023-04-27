@@ -60,10 +60,11 @@ export default function InventoryCard({ inventory }: MyProps) {
     enableReinitialize: true,
   });
 
-  let total: number =
+  let total: number = Math.floor(
     inventory.Conteo * presentacionLoad.Presentacion +
-    inventory.Saldo +
-    inventory.Formula;
+      inventory.Saldo +
+      inventory.Formula
+  );
 
   if (isNaN(total)) {
     total = 0;
@@ -168,7 +169,7 @@ export default function InventoryCard({ inventory }: MyProps) {
           {total ===
           presentacionLoad.Presentacion - presentacionLoad.Presentacion
             ? ""
-            : total - inventory.Cantidad}
+            : Math.floor(total - inventory.Cantidad)}
         </td>
       </tr>
     </>
