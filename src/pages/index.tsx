@@ -9,6 +9,7 @@ import { productContext } from "@/context/ProductContextProvider";
 import { inventoryContext } from "@/context/InventoryContextProveider";
 import { useFormik } from "formik";
 import ExportButton from "@/components/xlsx/ExportButton";
+import { useRouter } from "next/router";
 
 interface IData {
   CANTIDAD: number;
@@ -49,6 +50,8 @@ export default function index({ data1, data2 }: MyProps) {
   const { inventoryContent, setInventoryContent, deleteAllInventory } =
     useContext(inventoryContext);
 
+  const router = useRouter();
+
   const { setProducts } = useContext(productContext);
 
   useEffect(() => {
@@ -88,33 +91,41 @@ export default function index({ data1, data2 }: MyProps) {
   return (
     <div className="flex justify-center items-center">
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <div className="flex justify-start items-center gap-x-2 p-5">
-          {inventoryContent.length > 0 ? (
-            <>
-              <button
-                className="bg-red-500"
-                onClick={() => {
-                  deleteAllInventory();
-                  setInventoryContent([]);
-                }}
-              >
-                Eliminar
-              </button>
+        <div className="flex justify-between items-center gap-x-2 p-5">
+          <div className="flex justify-between items-center gap-x-2 ">
+            {inventoryContent.length > 0 ? (
+              <>
+                <button
+                  className="bg-red-500"
+                  onClick={() => {
+                    deleteAllInventory();
+                    setInventoryContent([]);
+                  }}
+                >
+                  Eliminar
+                </button>
 
-              <ExportButton tableId="my-table" />
-            </>
-          ) : (
-            <label className="buttonExcel flex cursor-pointer gap-x-1 justify-center items-center hover:bg-blue-500">
-              Importar Excel
-              <input
-                className="hidden"
-                type="file"
-                accept=".xlsx"
-                onChange={handleFileUpload}
-              />
-              <RiFileExcel2Fill />
-            </label>
-          )}
+                <ExportButton tableId="my-table" />
+              </>
+            ) : (
+              <label className="buttonExcel flex cursor-pointer gap-x-1 justify-center items-center hover:bg-blue-500">
+                Importar Excel
+                <input
+                  className="hidden"
+                  type="file"
+                  accept=".xlsx"
+                  onChange={handleFileUpload}
+                />
+                <RiFileExcel2Fill />
+              </label>
+            )}
+          </div>
+          <a
+            onClick={() => router.push("/product")}
+            className="cursor-pointer hover:text-blue-400"
+          >
+            Ir a productos
+          </a>
         </div>
         <table
           id="my-table"

@@ -3,6 +3,7 @@ import { GetServerSidePropsContext } from "next";
 import { useContext, useEffect, useState } from "react";
 import CardProduct from "../../components/product/CardProduct";
 import { useFormik } from "formik";
+import { useRouter } from "next/router";
 
 interface IProduct {
   Codigo: number;
@@ -24,6 +25,8 @@ interface IData {
 }
 
 export default function TableProduct({ data }: MyProps) {
+  const router = useRouter();
+
   const { products, setProducts, createProduct, setColumnOn, columnOn } =
     useContext(productContext);
 
@@ -52,7 +55,15 @@ export default function TableProduct({ data }: MyProps) {
     <div className="container mx-auto">
       <div className="flex justify-center flex-col items-center my-10 gap-y-2">
         <div className=" w-full flex justify-between items-center px-3 py-6  border-b border-gray-700">
-          <h3>Productos</h3>
+          <div className="flex flex-col gap-y-2">
+            <h3>Productos</h3>
+            <a
+              onClick={() => router.push("/")}
+              className="cursor-pointer hover:text-blue-400"
+            >
+              Ir a Inventario
+            </a>
+          </div>
           <button
             onClick={() => setColumnOn(!columnOn)}
             className={`${columnOn ? "bg-red-500" : "bg-blue-600 "} `}

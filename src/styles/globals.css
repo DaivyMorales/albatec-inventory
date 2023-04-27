@@ -31,3 +31,7 @@ button {
 .fieldTable {
   @apply bg-[#2f3336] font-semibold rounded-md px-1 shadow-sm shadow-gray-900;
 }
+
+a{
+  @apply underline text-blue-500 text-xs font-bold
+}
