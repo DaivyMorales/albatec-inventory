@@ -23,12 +23,14 @@ interface IContext {
   inventoryContent: IInventory[];
   setInventoryContent: React.Dispatch<React.SetStateAction<IInventory[]>>;
   deleteAllInventory: () => Promise<void>;
+  updateInventory: (id: string, body: object) => Promise<void>;
 }
 
 export const inventoryContext = createContext<IContext>({
   inventoryContent: [],
   setInventoryContent: () => {},
   deleteAllInventory: async () => {},
+  updateInventory: async () => {},
 });
 
 export const InventoryContextProvider = ({
@@ -45,9 +47,31 @@ export const InventoryContextProvider = ({
     }
   };
 
+  const updateInventory = async (id: string, body: object) => {
+    try {
+      const response = await axios.put(`/api/inventory/${id}`, body);
+      setInventoryContent(
+        inventoryContent.map((inventory) => {
+          if (inventory._id === id) {
+            return response.data;
+          } else {
+            return inventory;
+          }
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <inventoryContext.Provider
-      value={{ inventoryContent, setInventoryContent, deleteAllInventory }}
+      value={{
+        inventoryContent,
+        setInventoryContent,
+        deleteAllInventory,
+        updateInventory,
+      }}
     >
       {children}
     </inventoryContext.Provider>

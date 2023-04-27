@@ -2,6 +2,7 @@ import { FaProductHunt } from "react-icons/fa";
 import { useContext, useState, useEffect } from "react";
 import { useFormik } from "formik";
 import { productContext } from "@/context/ProductContextProvider";
+import { inventoryContext } from "@/context/InventoryContextProveider";
 
 interface IInventory {
   Codigo: number;
@@ -24,6 +25,8 @@ interface MyProps {
 export default function InventoryCard({ inventory }: MyProps) {
   const { fieldOn, setFieldOn, products, columnOn } =
     useContext(productContext);
+
+  const { updateInventory } = useContext(inventoryContext);
 
   const [presentacionLoad, setPresentacionLoad] = useState({
     Presentacion: 0,
@@ -49,6 +52,7 @@ export default function InventoryCard({ inventory }: MyProps) {
     initialValues: { inventorySchema },
     onSubmit: async (values, { resetForm }) => {
       console.log(values.inventorySchema);
+      updateInventory(inventory._id, values.inventorySchema);
       // createProduct(values.newProductSchema);
       // setColumnOn(!columnOn);
       resetForm();
@@ -148,7 +152,13 @@ export default function InventoryCard({ inventory }: MyProps) {
           )}
         </td>
         <td className="px-3 py-1 ">{total}</td>
-        <td className={`px-3 py-1 ${total - inventory.Cantidad < 0 ? "text-red-500" : "text-yellow-600"}`}>{total - inventory.Cantidad}</td>
+        <td
+          className={`px-3 py-1 ${
+            total - inventory.Cantidad < 0 ? "text-red-500" : "text-yellow-600"
+          }`}
+        >
+          {total - inventory.Cantidad}
+        </td>
       </tr>
     </>
   );
