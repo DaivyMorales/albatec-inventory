@@ -154,7 +154,11 @@ export default function InventoryCard({ inventory }: MyProps) {
         <td className="px-3 py-1 ">{total}</td>
         <td
           className={`px-3 py-1 ${
-            total - inventory.Cantidad < 0 ? "text-red-500" : "text-yellow-600"
+            total - inventory.Cantidad > 0
+              ? total - inventory.Cantidad === 0
+                ? "text-yellow-600"
+                : "text-gray-500 "
+              : "text-red-500 font-bold"
           }`}
         >
           {total - inventory.Cantidad}
