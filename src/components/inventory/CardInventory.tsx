@@ -43,18 +43,18 @@ export default function InventoryCard({ inventory }: MyProps) {
   }, []);
 
   const [inventorySchema, setInventorySchema] = useState({
-    Conteo: inventory.Conteo,
-    Saldo: inventory.Saldo,
-    Formula: inventory.Formula,
+    Conteo: inventory.Conteo === undefined ? 0 : inventory.Conteo,
+    Saldo: inventory.Saldo === undefined ? 0 : inventory.Saldo,
+    Formula: inventory.Formula === undefined ? 0 : inventory.Formula,
   });
 
   const formik = useFormik({
     initialValues: { inventorySchema },
     onSubmit: async (values, { resetForm }) => {
       console.log(values.inventorySchema);
-      updateInventory(inventory._id, values.inventorySchema);
-      // createProduct(values.newProductSchema);
-      // setColumnOn(!columnOn);
+      await updateInventory(inventory._id, values.inventorySchema);
+      setInventorySchema(values.inventorySchema);
+      setFieldOn("n");
       resetForm();
     },
     enableReinitialize: true,
@@ -111,7 +111,7 @@ export default function InventoryCard({ inventory }: MyProps) {
                 className="fieldTable w-12"
                 type="text"
                 onChange={formik.handleChange}
-                value={formik.values.inventorySchema.Conteo}
+                value={formik.values.inventorySchema.Conteo || ""}
                 name="inventorySchema.Conteo"
               />
             </form>
@@ -127,7 +127,7 @@ export default function InventoryCard({ inventory }: MyProps) {
                 className="fieldTable w-12"
                 type="text"
                 onChange={formik.handleChange}
-                value={formik.values.inventorySchema.Saldo}
+                value={formik.values.inventorySchema.Saldo || ""}
                 name="inventorySchema.Saldo"
               />
             </form>
@@ -143,7 +143,7 @@ export default function InventoryCard({ inventory }: MyProps) {
                 className="fieldTable w-12"
                 type="text"
                 onChange={formik.handleChange}
-                value={formik.values.inventorySchema.Formula}
+                value={formik.values.inventorySchema.Formula || ""}
                 name="inventorySchema.Formula"
               />
             </form>
