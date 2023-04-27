@@ -6,8 +6,9 @@ type TInventory = {
   Lote: string;
   Almacen: string;
   Cantidad: number;
-  // Formulas: number;
-  // product?: string;
+  Conteo: number;
+  Saldo: number;
+  Formula: number;
 };
 
 const inventorySchema = new Schema<TInventory>(
@@ -32,28 +33,18 @@ const inventorySchema = new Schema<TInventory>(
       type: Number,
       trim: true,
     },
-    // Formulas: {
-    //   type: Number,
-    //   trim: true,
-    // },
-    // product: {
-    //   type: String,
-    //   ref: "Product",
-    //   validate: {
-    //     validator: function (code: number) {
-    //       if (code === undefined || code === null) {
-    //         // El campo es opcional y no se debe validar
-    //         return true;
-    //       } else {
-    //         // El campo es obligatorio y se debe validar
-    //         return Product.findOne({ code })
-    //           .then((product) => !!product)
-    //           .catch(() => false);
-    //       }
-    //     },
-    //     message: "The product doesn't exists!",
-    //   },
-    // },
+    Conteo: {
+      type: Number,
+      trim: true,
+    },
+    Saldo: {
+      type: Number,
+      trim: true,
+    },
+    Formula: {
+      type: Number,
+      trim: true,
+    },
   },
   {
     timestamps: true,
