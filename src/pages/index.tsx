@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import * as xslx from "xlsx";
 import { GetServerSidePropsContext } from "next";
 import axios from "axios";
 import { RiFileExcel2Fill } from "react-icons/ri";
 import CardInventory from "../components/inventory/CardInventory";
 import { useContext } from "react";
+import { IoSearch } from "react-icons/io5";
 import { productContext } from "@/context/ProductContextProvider";
 import { inventoryContext } from "@/context/InventoryContextProveider";
 import { useFormik } from "formik";
@@ -58,6 +59,13 @@ export default function index({ data1, data2 }: MyProps) {
     setInventoryContent(data1);
     setProducts(data2);
   }, []);
+  console.log(inventoryContent);
+
+  const [searchTerm, setSearchTerm] = useState("");
+  console.log(searchTerm);
+  const handleDescripcion = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
 
   const handleFileUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -90,7 +98,7 @@ export default function index({ data1, data2 }: MyProps) {
 
   return (
     <div className="flex justify-center items-center">
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+      <div className="relative overflow-x-auto  sm:rounded-lg">
         <div className="flex justify-between items-center gap-x-2 p-5">
           <div className="flex justify-between items-center gap-x-2 ">
             {inventoryContent.length > 0 ? (
@@ -119,6 +127,17 @@ export default function index({ data1, data2 }: MyProps) {
                 <RiFileExcel2Fill />
               </label>
             )}
+            <div className={`${inventoryContent.length > 0 ? "" : "hidden"}`}>
+              <div className="flex gap-x-1 items-center justify-center  rounded-lg pl-2 py-1">
+                <IoSearch />
+                <input
+                  type="text"
+                  className="text-xs bg-[#1a1c1e] font-semibold  px-1 shadow-sm shadow-gray-900py-1 "
+                  onChange={handleDescripcion}
+                  placeholder="Ej: SULFATO FERROSO"
+                />
+              </div>
+            </div>
           </div>
           <a
             onClick={() => router.push("/product")}
@@ -129,7 +148,9 @@ export default function index({ data1, data2 }: MyProps) {
         </div>
         <table
           id="my-table"
-          className=" text-sm text-left text-blue-100 dark:text-blue-100"
+          className={`${
+            inventoryContent.length > 0 ? "" : "hidden"
+          }  text-sm text-left text-blue-100 dark:text-blue-100`}
         >
           <thead className="text-2xs text-gray-400 uppercase border-b border-gray-700">
             <tr>
@@ -169,9 +190,20 @@ export default function index({ data1, data2 }: MyProps) {
             </tr>
           </thead>
           <tbody>
-            {inventoryContent.map((inventory) => (
-              <CardInventory inventory={inventory} key={inventory._id} />
-            ))}
+            {inventoryContent
+              .filter((inventory) => {
+                if (searchTerm == "") {
+                  return inventory;
+                } else if (
+                  inventory.Descripcion &&
+                  inventory.Descripcion.includes(searchTerm)
+                ) {
+                  return inventory;
+                }
+              })
+              .map((inventory) => (
+                <CardInventory inventory={inventory} key={inventory._id} />
+              ))}
           </tbody>
         </table>
       </div>
