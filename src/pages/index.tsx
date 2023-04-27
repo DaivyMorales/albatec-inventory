@@ -8,6 +8,7 @@ import { useContext } from "react";
 import { productContext } from "@/context/ProductContextProvider";
 import { inventoryContext } from "@/context/InventoryContextProveider";
 import { useFormik } from "formik";
+import ExportButton from "@/components/xlsx/ExportButton";
 
 interface IData {
   CANTIDAD: number;
@@ -100,9 +101,7 @@ export default function index({ data1, data2 }: MyProps) {
                 Eliminar
               </button>
 
-              <button className="border-2 border-gray-700 hover:bg-gray-700">
-                Exportar
-              </button>
+              <ExportButton tableId="my-table" />
             </>
           ) : (
             <label className="buttonExcel flex cursor-pointer gap-x-1 justify-center items-center hover:bg-blue-500">
@@ -117,7 +116,10 @@ export default function index({ data1, data2 }: MyProps) {
             </label>
           )}
         </div>
-        <table className=" text-sm text-left text-blue-100 dark:text-blue-100">
+        <table
+          id="my-table"
+          className=" text-sm text-left text-blue-100 dark:text-blue-100"
+        >
           <thead className="text-2xs text-gray-400 uppercase border-b border-gray-700">
             <tr>
               <th scope="col" className="px-2">
