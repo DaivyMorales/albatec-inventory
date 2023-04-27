@@ -23,6 +23,7 @@ interface IContext {
   createProduct: (values: object | undefined) => Promise<void>;
   columnOn: boolean;
   setColumnOn: React.Dispatch<React.SetStateAction<boolean>>;
+  deleteProduct: (Codigo: number) => Promise<void>;
 }
 
 export const productContext = createContext<IContext>({
@@ -34,6 +35,7 @@ export const productContext = createContext<IContext>({
   createProduct: async () => {},
   columnOn: false,
   setColumnOn: () => {},
+  deleteProduct: async () => {},
 });
 
 export const ProductContextProvider = ({ children }: ProductContextProps) => {
@@ -67,6 +69,15 @@ export const ProductContextProvider = ({ children }: ProductContextProps) => {
     }
   };
 
+  const deleteProduct = async (Codigo: number) => {
+    try {
+      await axios.post(`/api/product/${Codigo}`);
+      setProducts(products.filter((product) => product.Codigo !== Codigo));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <productContext.Provider
       value={{
@@ -78,6 +89,7 @@ export const ProductContextProvider = ({ children }: ProductContextProps) => {
         createProduct,
         columnOn,
         setColumnOn,
+        deleteProduct,
       }}
     >
       {children}

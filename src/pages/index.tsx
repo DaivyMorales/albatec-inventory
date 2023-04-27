@@ -97,13 +97,16 @@ export default function index({ data }: MyProps) {
           </button>
         </div>
         <table className="w-full text-sm text-left text-blue-100 dark:text-blue-100">
-          <thead className="text-xs text-white uppercase bg-blue-600 border-b border-blue-400 dark:text-white">
+          <thead className="text-2xs text-gray-400 uppercase border-b border-gray-700">
             <tr>
               <th scope="col" className="px-6 py-3">
                 Codigo
               </th>
               <th scope="col" className="px-6 py-3">
                 Descripcion
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Presentacion
               </th>
               <th scope="col" className="px-6 py-3">
                 Lote
@@ -113,6 +116,18 @@ export default function index({ data }: MyProps) {
               </th>
               <th scope="col" className="px-6 py-3">
                 Cantidad
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Conteo
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Saldo
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Total
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Diferencia
               </th>
             </tr>
           </thead>
