@@ -1,11 +1,10 @@
 import { FaProductHunt } from "react-icons/fa";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useFormik } from "formik";
 import { productContext } from "@/context/ProductContextProvider";
-import { TiDelete } from "react-icons/ti";
 
 interface IInventory {
-  Codigo: string;
+  Codigo: number;
   Descripcion: string;
   Lote: string;
   Almacen: number;
@@ -20,52 +19,31 @@ interface MyProps {
 }
 
 export default function InventoryCard({ inventory }: MyProps) {
-  const { fieldOn, setFieldOn, updateProduct, columnOn, deleteProduct } =
+  const { fieldOn, setFieldOn, products, columnOn } =
     useContext(productContext);
 
-  const [hover, setHover] = useState(false);
-
-  const handleMouseEnter = () => {
-    setHover(true);
-  };
-
-  const handleMouseLeave = () => {
-    setHover(false);
-  };
-
-  const [productSchema, setProductSchema] = useState({
-    Codigo: inventory.Codigo,
-    Descripcion: inventory.Descripcion,
-    Presentacion: inventory.Presentacion,
+  const [presentacionLoad, setPresentacionLoad] = useState({
+    Presentacion: 0,
   });
 
-  const formik = useFormik({
-    initialValues: { productSchema },
-    onSubmit: async (values) => {
-      console.log(values.productSchema);
-      setProductSchema(values.productSchema);
-      await updateProduct(inventory.Codigo, values.productSchema);
-      setFieldOn("n");
-    },
-    enableReinitialize: true,
-  });
+  useEffect(() => {
+    products.filter((product) => {
+      product.Codigo === inventory.Codigo
+        ? setPresentacionLoad({
+            Presentacion: product.Presentacion,
+          })
+        : "";
+    });
+  }, []);
+
   return (
     <>
       <tr
-        className={`text-xs border-b border-gray-700 text-gray-300 font-normal ${
+        className={`text-2xs border-b border-gray-700 text-gray-300 font-normal ${
           fieldOn === inventory._id ? "bg-gray-900" : ""
         } hover:bg-gray-900 ${columnOn ? "text-gray-600" : ""}`}
         onClick={() => setFieldOn(inventory._id)}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
       >
-        {/* <TiDelete
-          onClick={async () => await deleteProduct(product.Codigo)}
-          size={22}
-          className={`${
-            hover ? "" : "hidden"
-          }  cursor-pointer hover:text-red-600 `}
-        /> */}
         <th
           scope="row"
           className="px-3 py-1  "
@@ -74,7 +52,7 @@ export default function InventoryCard({ inventory }: MyProps) {
           {inventory.Codigo}
         </th>
         <td
-          className={`px-3 py-1 flex justify-start items-center gap-x-1 ${
+          className={`px-3 py-1  flex justify-start items-center gap-x-1 ${
             columnOn ? "text-gray-600" : "text-white"
           }`}
           onClick={() => setFieldOn(inventory._id)}
@@ -86,9 +64,9 @@ export default function InventoryCard({ inventory }: MyProps) {
           />
         </td>
         <td className="px-3 py-1" onClick={() => setFieldOn(inventory._id)}>
-          25
+          {presentacionLoad.Presentacion}
         </td>
-        <td className="px-3 py-1" onClick={() => setFieldOn(inventory._id)}>
+        <td className="px-1  py-1" onClick={() => setFieldOn(inventory._id)}>
           {inventory.Lote}
         </td>
         <td className="px-3 py-1" onClick={() => setFieldOn(inventory._id)}>

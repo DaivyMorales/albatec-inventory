@@ -4,6 +4,8 @@ import { GetServerSidePropsContext } from "next";
 import axios from "axios";
 import { RiFileExcel2Fill } from "react-icons/ri";
 import CardInventory from "../components/inventory/CardInventory";
+import { useContext } from "react";
+import { productContext } from "@/context/ProductContextProvider";
 
 interface IData {
   CANTIDAD: number;
@@ -13,7 +15,7 @@ interface IData {
 }
 
 interface IInventory {
-  Codigo: string;
+  Codigo: number;
   Descripcion: string;
   Lote: string;
   Almacen: number;
@@ -23,15 +25,28 @@ interface IInventory {
   updatedAt: string;
 }
 
-interface MyProps {
-  data: IInventory[];
+interface IProduct {
+  Codigo: number;
+  Descripcion: string;
+  Presentacion: number;
+  _id: string;
+  createdAt: string;
+  updateAt: string;
 }
 
-export default function index({ data }: MyProps) {
+interface MyProps {
+  data1: IInventory[];
+  data2: IProduct[];
+}
+
+export default function index({ data1, data2 }: MyProps) {
   const [inventoryContent, setInventoryContent] = useState<IInventory[]>([]);
 
+  const { setProducts } = useContext(productContext);
+
   useEffect(() => {
-    setInventoryContent(data);
+    setInventoryContent(data1);
+    setProducts(data2);
   }, []);
 
   const handleFileUpload = async (
@@ -72,7 +87,7 @@ export default function index({ data }: MyProps) {
     }
   };
   return (
-    <div className="flex   justify-center items-center">
+    <div className="flex justify-center items-center">
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <div>
           <label className="buttonExcel">
@@ -96,37 +111,40 @@ export default function index({ data }: MyProps) {
             Eliminar
           </button>
         </div>
-        <table className="w-full text-sm text-left text-blue-100 dark:text-blue-100">
+        <table className=" text-sm text-left text-blue-100 dark:text-blue-100">
           <thead className="text-2xs text-gray-400 uppercase border-b border-gray-700">
             <tr>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-2">
                 Codigo
               </th>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-2">
                 Descripcion
               </th>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-2">
                 Presentacion
               </th>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="">
                 Lote
               </th>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-2">
                 Almacen
               </th>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-2">
                 Cantidad
               </th>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-2">
                 Conteo
               </th>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-2">
                 Saldo
               </th>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-2">
+                Formula
+              </th>
+              <th scope="col" className="px-2">
                 Total
               </th>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-2">
                 Diferencia
               </th>
             </tr>
@@ -143,10 +161,15 @@ export default function index({ data }: MyProps) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const res = await fetch("https://albatec-inventory.vercel.app/api/inventory");
-  const data = await res.json();
+  const res1 = await fetch(
+    "https://albatec-inventory.vercel.app/api/inventory"
+  );
+  const data1 = await res1.json();
+
+  const res2 = await fetch("https://albatec-inventory.vercel.app/api/product");
+  const data2 = await res2.json();
 
   return {
-    props: { data },
+    props: { data1, data2 },
   };
 }
