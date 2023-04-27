@@ -11,6 +11,9 @@ interface IInventory {
   Lote: string;
   Almacen: number;
   Cantidad: number;
+  Conteo: number;
+  Saldo: number;
+  Formula: number;
   _id: string;
   createdAt: string;
   updatedAt: string;

@@ -9,6 +9,9 @@ interface IInventory {
   Lote: string;
   Almacen: number;
   Cantidad: number;
+  Conteo: number;
+  Saldo: number;
+  Formula: number;
   _id: string;
   createdAt: string;
   updatedAt: string;
@@ -35,6 +38,28 @@ export default function InventoryCard({ inventory }: MyProps) {
         : "";
     });
   }, []);
+
+  const [inventorySchema, setInventorySchema] = useState({
+    Conteo: inventory.Conteo,
+    Saldo: inventory.Saldo,
+    Formula: inventory.Formula,
+  });
+
+  const formik = useFormik({
+    initialValues: { inventorySchema },
+    onSubmit: async (values, { resetForm }) => {
+      console.log(values.inventorySchema);
+      // createProduct(values.newProductSchema);
+      // setColumnOn(!columnOn);
+      resetForm();
+    },
+    enableReinitialize: true,
+  });
+
+  const total =
+    inventory.Conteo * presentacionLoad.Presentacion +
+    inventory.Saldo +
+    inventory.Formula;
 
   return (
     <>
@@ -75,6 +100,55 @@ export default function InventoryCard({ inventory }: MyProps) {
         <td className="px-3 py-1" onClick={() => setFieldOn(inventory._id)}>
           {inventory.Cantidad}
         </td>
+        <td className="px-3 py-1 " onClick={() => setFieldOn(inventory._id)}>
+          {fieldOn === inventory._id ? (
+            <form onSubmit={formik.handleSubmit}>
+              <input
+                className="fieldTable w-12"
+                type="text"
+                onChange={formik.handleChange}
+                value={formik.values.inventorySchema.Conteo}
+                name="inventorySchema.Conteo"
+              />
+            </form>
+          ) : (
+            inventory.Conteo
+          )}
+        </td>
+
+        <td className="px-3 py-1 " onClick={() => setFieldOn(inventory._id)}>
+          {fieldOn === inventory._id ? (
+            <form onSubmit={formik.handleSubmit}>
+              <input
+                className="fieldTable w-12"
+                type="text"
+                onChange={formik.handleChange}
+                value={formik.values.inventorySchema.Saldo}
+                name="inventorySchema.Saldo"
+              />
+            </form>
+          ) : (
+            inventory.Saldo
+          )}
+        </td>
+
+        <td className="px-3 py-1 " onClick={() => setFieldOn(inventory._id)}>
+          {fieldOn === inventory._id ? (
+            <form onSubmit={formik.handleSubmit}>
+              <input
+                className="fieldTable w-12"
+                type="text"
+                onChange={formik.handleChange}
+                value={formik.values.inventorySchema.Formula}
+                name="inventorySchema.Formula"
+              />
+            </form>
+          ) : (
+            inventory.Formula
+          )}
+        </td>
+        <td className="px-3 py-1 ">{total}</td>
+        <td className={`px-3 py-1 ${total - inventory.Cantidad < 0 ? "text-red-500" : "text-yellow-600"}`}>{total - inventory.Cantidad}</td>
       </tr>
     </>
   );

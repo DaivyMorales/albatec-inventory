@@ -7,6 +7,7 @@ import CardInventory from "../components/inventory/CardInventory";
 import { useContext } from "react";
 import { productContext } from "@/context/ProductContextProvider";
 import { inventoryContext } from "@/context/InventoryContextProveider";
+import { useFormik } from "formik";
 
 interface IData {
   CANTIDAD: number;
@@ -21,6 +22,9 @@ interface IInventory {
   Lote: string;
   Almacen: number;
   Cantidad: number;
+  Conteo: number;
+  Saldo: number;
+  Formula: number;
   _id: string;
   createdAt: string;
   updatedAt: string;
@@ -79,8 +83,6 @@ export default function index({ data1, data2 }: MyProps) {
       console.error("Error reading file:", event);
     };
   };
-
-  
 
   return (
     <div className="flex justify-center items-center">
