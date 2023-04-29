@@ -7,6 +7,7 @@ import { inventoryContext } from "@/context/InventoryContextProveider";
 interface IInventory {
   Codigo: number;
   Descripcion: string;
+  Presentacion: number;
   Lote: string;
   Almacen: number;
   Cantidad: number;
@@ -28,21 +29,9 @@ export default function UserCardInventory({ inventory }: MyProps) {
 
   const { updateInventory } = useContext(inventoryContext);
 
-  const [presentacionLoad, setPresentacionLoad] = useState({
-    Presentacion: 0,
-  });
-
-  useEffect(() => {
-    products.filter((product) => {
-      product.Codigo === inventory.Codigo
-        ? setPresentacionLoad({
-            Presentacion: product.Presentacion,
-          })
-        : "";
-    });
-  }, []);
-
   const [inventorySchema, setInventorySchema] = useState({
+    Presentacion:
+      inventory.Presentacion === undefined ? 0 : inventory.Presentacion,
     Conteo: inventory.Conteo === undefined ? 0 : inventory.Conteo,
     Saldo: inventory.Saldo === undefined ? 0 : inventory.Saldo,
     Formula: inventory.Formula === undefined ? 0 : inventory.Formula,
@@ -61,7 +50,7 @@ export default function UserCardInventory({ inventory }: MyProps) {
   });
 
   let total: number = Math.floor(
-    inventory.Conteo * presentacionLoad.Presentacion +
+    inventory.Conteo * inventory.Presentacion +
       inventory.Saldo +
       inventory.Formula
   );
@@ -97,8 +86,20 @@ export default function UserCardInventory({ inventory }: MyProps) {
             className={`${columnOn ? "text-gray-600" : "text-blue-500"}`}
           />
         </td>
-        <td className="px-3 py-1" onClick={() => setFieldOn(inventory._id)}>
-          {presentacionLoad.Presentacion}
+        <td className="px-3 py-1 " onClick={() => setFieldOn(inventory._id)}>
+          {fieldOn === inventory._id ? (
+            <form onSubmit={formik.handleSubmit}>
+              <input
+                className="fieldTable w-8"
+                type="text"
+                onChange={formik.handleChange}
+                value={formik.values.inventorySchema.Presentacion || ""}
+                name="inventorySchema.Presentacion"
+              />
+            </form>
+          ) : (
+            inventory.Presentacion
+          )}
         </td>
         <td className="px-1  py-1" onClick={() => setFieldOn(inventory._id)}>
           {inventory.Lote}
@@ -106,9 +107,6 @@ export default function UserCardInventory({ inventory }: MyProps) {
         <td className="px-3 py-1" onClick={() => setFieldOn(inventory._id)}>
           {inventory.Almacen}
         </td>
-        {/* <td className="px-3 py-1" onClick={() => setFieldOn(inventory._id)}>
-          {inventory.Cantidad}
-        </td> */}
         <td className="px-3 py-1 " onClick={() => setFieldOn(inventory._id)}>
           {fieldOn === inventory._id ? (
             <form onSubmit={formik.handleSubmit}>
@@ -141,36 +139,7 @@ export default function UserCardInventory({ inventory }: MyProps) {
           )}
         </td>
 
-        {/* <td className="px-3 py-1 " onClick={() => setFieldOn(inventory._id)}>
-          {fieldOn === inventory._id ? (
-            <form onSubmit={formik.handleSubmit}>
-              <input
-                className="fieldTable w-8"
-                type="text"
-                onChange={formik.handleChange}
-                value={formik.values.inventorySchema.Formula || ""}
-                name="inventorySchema.Formula"
-              />
-            </form>
-          ) : (
-            inventory.Formula
-          )}
-        </td> */}
         <td className="px-3 py-1 ">{total == 0 ? "" : total}</td>
-        {/* <td
-          className={`px-3 py-1 ${
-            total - inventory.Cantidad > 0
-              ? total - inventory.Cantidad === 0
-                ? "text-yellow-600"
-                : "text-gray-400 "
-              : "text-red-500 font-bold"
-          }`}
-        >
-          {total ===
-          presentacionLoad.Presentacion - presentacionLoad.Presentacion
-            ? ""
-            : Math.floor(total - inventory.Cantidad)}
-        </td> */}
       </tr>
     </>
   );

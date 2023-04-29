@@ -3,6 +3,7 @@ import { Schema, model, models } from "mongoose";
 type TInventory = {
   Codigo: number;
   Descripcion: string;
+  Presentacion: number;
   Lote: string;
   Almacen: string;
   Cantidad: number;
@@ -23,6 +24,10 @@ const inventorySchema = new Schema<TInventory>(
     },
     Lote: {
       type: String,
+      trim: true,
+    },
+    Presentacion: {
+      type: Number,
       trim: true,
     },
     Almacen: {
