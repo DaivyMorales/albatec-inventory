@@ -118,6 +118,8 @@ export default function UserCardInventory({ inventory }: MyProps) {
                 name="inventorySchema.Conteo"
               />
             </form>
+          ) : inventory.Conteo === 0 ? (
+            ""
           ) : (
             inventory.Conteo
           )}
@@ -134,6 +136,8 @@ export default function UserCardInventory({ inventory }: MyProps) {
                 name="inventorySchema.Saldo"
               />
             </form>
+          ) : inventory.Saldo === 0 ? (
+            ""
           ) : (
             inventory.Saldo
           )}

@@ -8,6 +8,7 @@ interface InventoryContextProps {
 interface IInventory {
   Codigo: number;
   Descripcion: string;
+  Presentacion: number;
   Lote: string;
   Almacen: number;
   Cantidad: number;

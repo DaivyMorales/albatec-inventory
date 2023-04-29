@@ -22,6 +22,7 @@ interface IData {
 interface IInventory {
   Codigo: number;
   Descripcion: string;
+  Presentacion: number;
   Lote: string;
   Almacen: number;
   Cantidad: number;
@@ -62,9 +63,9 @@ export default function index({ data1, data2 }: MyProps) {
   console.log(inventoryContent);
 
   const [searchTerm, setSearchTerm] = useState("");
-  console.log(searchTerm);
   const handleDescripcion = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
+    const value = event.target.value.toUpperCase();
+    setSearchTerm(value);
   };
 
   const handleFileUpload = async (
@@ -135,6 +136,7 @@ export default function index({ data1, data2 }: MyProps) {
                   className="text-xs bg-[#1a1c1e] font-semibold  px-1 shadow-sm shadow-gray-900py-1 "
                   onChange={handleDescripcion}
                   placeholder="Ej: SULFATO FERROSO"
+                  value={searchTerm.toUpperCase()}
                 />
               </div>
             </div>
