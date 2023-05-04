@@ -173,7 +173,7 @@ export default function InventoryCard({ inventory }: MyProps) {
               : "text-red-500 font-bold"
           }`}
         >
-          {total === 0 ? "" : Math.floor(total - inventory.Cantidad)}
+          {total === 0 ? "" : (total - inventory.Cantidad).toFixed(2)}
         </td>
       </tr>
     </>
